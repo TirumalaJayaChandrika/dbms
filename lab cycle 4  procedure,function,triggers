@@ -1,0 +1,270 @@
+CS 262 – DBMS Lab (A.Y. 2021 – 2022)
+Lab Cycle – 4
+
+1.	Write a stored procedure, raise_salary which accepts an employee number, increment and modifies salary of that employee in employee table. Modified salary = salary increase amount+ current salary. If employee number is not found or if the current salary is null, it should raise an exception. Otherwise, updates the salary.
+create or replace procedure incr(n in number) as
+s number;
+i_s number;
+e exception;
+begin
+	select sal into s from emp where empno=n;
+	if s is null then raise e;
+	else
+	if s>3000 then
+		s:=0.3*s;
+	elsif s>1500 and s<3000 then
+		s:=0.2*s;
+	else
+		s:=0.1*s;
+	end if;
+dbms_output.put_line(s);
+	update emp set sal=sal+s where empno=n;
+	end if;
+exception
+	when no_data_found then
+	dbms_output.put_line('no data found');
+	when e then
+	dbms_output.put_line('others');
+end;
+	
+
+
+SQL> select * from emp;
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+      7369 SMITH      CLERK           7902 17-DEC-80        800                    20
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30
+      7566 JONES      MANAGER         7839 02-APR-81       2975                    20
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850                    30
+      7782 CLARK      MANAGER         7839 09-JUN-81       2450                    10
+      7788 SCOTT      ANALYST         7566 19-APR-87       3000                    20
+      7839 KING       PRESIDENT            17-NOV-81       5000                    10
+      7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30
+      7876 ADAMS      CLERK           7788 23-MAY-87       1100                    20
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+      7900 JAMES      CLERK           7698 03-DEC-81        950                    30
+      7902 FORD       ANALYST         7566 03-DEC-81       3000                    20
+      7934 MILLER     CLERK           7782 23-JAN-82       1300                    10
+
+14 rows selected.
+
+
+
+
+
+
+SQL> @C:\Users\jayac\OneDrive\Documents\dbms\4_1.sql;
+ 27  /
+
+Procedure created.
+
+SQL> exec incr(7876);
+110
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from emp;
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+      7369 SMITH      CLERK           7902 17-DEC-80        800                    20
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30
+      7566 JONES      MANAGER         7839 02-APR-81       2975                    20
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850                    30
+      7782 CLARK      MANAGER         7839 09-JUN-81       2450                    10
+      7788 SCOTT      ANALYST         7566 19-APR-87       3000                    20
+      7839 KING       PRESIDENT            17-NOV-81       5000                    10
+      7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30
+      7876 ADAMS      CLERK           7788 23-MAY-87       1210                    20
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+      7900 JAMES      CLERK           7698 03-DEC-81        950                    30
+      7902 FORD       ANALYST         7566 03-DEC-81       3000                    20
+      7934 MILLER     CLERK           7782 23-JAN-82       1300                    10
+
+14	ows selected.
+2 Write a PL/SQL function that accepts department number and returns the total salary of the department.
+create or replace function add_s(n number) return number as
+s emp.sal%type;
+begin
+	select sum(sal) into s from emp where deptno=n;
+	return s;
+end;
+
+SQL> @C:\Users\jayac\OneDrive\Documents\dbms\4_2.sql;
+  7  /
+
+Function created.
+
+SQL> exec dbms_output.put_line(add_s(10));
+8750
+
+PL/SQL procedure successfully completed.
+
+3
+Write a PL/SQL block that computes increment of an employee in employee table by using incr function which takes employee number as argument, calculates increment and returns the same based on the following criteria:
+•	If salary <= 3000 – increment = 30% of salary
+•	If salary > 3000 and <= 6000– increment = 20% of salary
+•	Else increment = 10% of salary.
+ 
+create or replace function incr1(n in number) return number as
+s number;
+i_s number;
+e exception;
+begin
+	select sal into s from emp where empno=n;
+	
+	if s<3000 then
+		s:=0.3*s;
+	elsif s<6000 and s>3000 then
+		s:=0.2*s;
+	else
+		s:=0.1*s;
+	end if;
+	return s;
+
+end;
+
+SQL> @C:\Users\jayac\OneDrive\Documents\dbms\4_3.sql;
+ 20  /
+
+Function created.
+SQL> exec dbms_output.put_line(incr1(7876));
+330	
+
+4Write a stored procedure that displays the employee names and their total earnings from the Emp Table. Hint: Total earning of an employee = 12*(gross_salary+commission)
+
+create or replace procedure disp1  as
+no emp.empno%type;
+s emp.sal%type;
+c_s  number;
+c emp.comm%type;
+cursor curs is
+select empno,sal,comm  from emp;
+begin
+	open curs;
+	loop
+	fetch curs into no,s,c;
+
+	exit when curs%notfound;
+	c_s:=12*(s+nvl(c,0));
+	insert into display values(no,c_s);
+	end loop;
+	close curs;
+end;
+SQL>  @C:\Users\jayac\OneDrive\Documents\dbms\4_4.sql;
+ 21  /
+
+Procedure created.
+
+SQL> exec disp1();
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from display;
+
+NAME                          S
+-------------------- ----------
+7369                       9600	
+7499                      22800
+7521                      21000
+7566                      35700
+7654                      31800
+7698                      34200
+7782                      29400
+7788                      36000
+7839                      60000
+7844                      18000
+7876                      13200
+
+NAME                          S
+-------------------- ----------
+7900                      11400
+7902                      36000
+7934                      15600
+
+14 rows selected.
+
+5Create a database trigger that checks whether the new salary of employee is less than existing salary. If so, raise an appropriate exception and avoid that updation.
+
+
+Consider the following tables
+PERSINFO
+EMPNO	NAME	AGE
+AUDITPERSINFO
+EMPNO	NAME	AGE	OPERATION	ODATE
+create or replace trigger up_emp
+before update on emp
+for each row
+begin
+if(:old.sal>:new.sal) then
+raise_application_error(-20000,'less salary is updating');
+end if;
+end;
+
+SQL>  @C:\Users\jayac\OneDrive\Desktop\5.sql;
+  9  /
+
+Trigger created.
+
+SQL> update emp set sal=200 where empno=7876;
+update emp set sal=200 where empno=7876
+       *
+ERROR at line 1:
+ORA-20000: less salary is updating
+ORA-06512: at "SCOTT.UP_EMP", line 3
+ORA-04088: error during execution of trigger 'SCOTT.UP_EMP'
+6
+PERSINFO is the table for which the auditing must be performed and AUDITPERSINFO is the table which keeps track of the records deleted or modified. Create a database trigger audit_trial. This trigger is forced when an UPDATE or a DELETE is performed on the table PERSINFO. It first checks for the operation being performed on the table. Then depending on the operation, a variable (that corresponds to operation) is assigned the value ‘UPDATE’ or ‘DELETE’ and then inserts the updated/deleted record into AUDITPERSINFO.
+
+create or replace trigger audit_trail
+after delete or update on persinfo 
+for each row
+declare
+no number;
+n varchar2(20);
+a number;
+o varchar2(20);
+begin
+no:=:old.eno;
+n:=:old.name;
+a:=:old.age;
+if deleting then
+insert into auditpersinfo values(no,n,a,'delete',sysdate);
+elsif updating then
+insert into auditpersinfo values(no,n,a,'update',sysdate);
+end if;
+end;
+SQL> @C:\Users\jayac\OneDrive\Desktop\6.sql;
+ 20  /
+
+Trigger created.
+
+SQL> insert into persinfo(123,'jaya',20);
+insert into persinfo(123,'jaya',20)
+                     *
+ERROR at line 1:
+ORA-00928: missing SELECT keyword
+
+
+SQL> insert into persinfo values(123,'jaya',20);
+
+1 row created.
+
+SQL> delete from persinfo where eno=123;
+
+1 row deleted.
+
+SQL> select * from auditpersinfo;
+
+       ENO NAME                        AGE OPER                 ODATE
+---------- -------------------- ---------- -------------------- ---------
+       123 jaya                         20 delete               21-SEP-22
