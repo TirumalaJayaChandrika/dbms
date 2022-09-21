@@ -1,0 +1,791 @@
+CS 262 – DBMS Lab (A.Y. 2021 – 2022)
+Lab Cycle – 3
+
+1.	Write a PL/SQL block to read a number and check whether it is a palindrome or not.
+
+declare
+n number:=&n;
+s number;
+a number;
+begin
+s:=n;
+a:=0;
+
+while(s>0) loop
+a:=a*10+mod(s,10);
+s:=trunc(s/10);
+
+end loop;
+
+if(n=a) then
+dbms_output.put_line('palindrome');
+else
+dbms_output.put_line('not palindrome');
+end if;
+end;
+
+Enter value for n: 1221
+old   2: n number:=&n;
+new   2: n number:=1221;
+
+PL/SQL procedure successfully completed.
+2.	Write a PL/SQL Program to print the first n fibonacci numbers.
+declare
+n number:=&n;
+a number;
+b number;
+c number;
+i number;
+begin
+a:=0;
+i:=1;
+b:=1;
+dbms_output.put_line('fibanocci are:  '||a);
+dbms_output.put_line(b);
+while i<(n-1) loop
+c:=a+b;
+dbms_output.put_line(c);
+a:=b;
+b:=c;
+i:=i+1;
+end loop;
+end;
+
+SQL> @C:\Users\jayac\OneDrive\Desktop\quiries-dbms\c2.sql;
+ 21  /
+Enter value for n: 6
+old   2: n number:=&n;
+new   2: n number:=6;
+fibanocci are:  0
+1
+1
+2
+3
+5
+
+PL/SQL procedure successfully completed.
+
+
+3.	Write a PL/SQL block which will accept a number and checks if it is a prime number or not. 
+declare
+n number:=&n;
+i number;
+c number;
+begin
+i:=2;
+c:=0;
+while(i<sqrt(n)) loop
+if(mod(n,i)=0) then
+c:=c+1;
+exit;
+end if;
+i:=i+1;
+end loop;
+if(c=0) then
+dbms_output.put_line('prime');
+else 
+dbms_output.put_line('not prime');
+end if;
+end;
+
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\jayac\OneDrive\Desktop\quiries-dbms\3c.sql;
+ 26  /
+Enter value for n: 11
+old   2: n number:=&n;
+new   2: n number:=11;
+prime
+
+PL/SQL procedure successfully completed.
+
+4.	Write a PL/SQL block which will accept two numbers and find out their LCM and HCF. The output should be stored in a table called DEMO_TAB.
+DEMO_TAB
+Number1	Number2	LCM	HCF
+
+declare
+h number;
+n1 number:=&n1;
+n2 number:=&n2;
+p number;
+q number;
+t number;
+l number;
+begin
+p:=n1;
+q:=n2;
+while mod(n2,n1)!=0 loop
+t:=mod(n2,n1);
+n2:=n1;
+n1:=t;
+end loop;
+h:=n1;
+l:=(p*q)/n1;
+insert into lcm_hcf values(p,q,h,l);
+dbms_output.put_line('hcf   '||h||'  lcm  '|| l);
+end;
+
+
+SQL>  @C:\Users\jayac\OneDrive\Desktop\quiries-dbms\4c.sql;
+ 22  /
+Enter value for n1: 4
+old   3: n1 number:=&n1;
+new   3: n1 number:=4;
+Enter value for n2: 8
+old   4: n2 number:=&n2;
+new   4: n2 number:=8;
+hcf   4  lcm 8
+
+PL/SQL procedure successfully completed.
+
+SQL>  @C:\Users\jayac\OneDrive\Desktop\quiries-dbms\4c.sql;
+ 22  /
+Enter value for n1: 5
+old   3: n1 number:=&n1;
+new   3: n1 number:=5;
+Enter value for n2: 8
+old   4: n2 number:=&n2;
+new   4: n2 number:=8;
+hcf   1  lcm  40
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from lcm_hcf;
+
+         A          B        HCF        LCM
+---------- ---------- ---------- ----------
+         4          8          4          8
+         5          8          1         40
+
+
+5.	Write a Pl/SQL program using FOR loop to insert ten rows into a database table.
+declare
+begin
+for i in 1..10 loop
+insert into displa values(i);
+end loop;
+end;
+
+
+SQL> create table displa(n number);
+
+Table created.
+
+SQL>  @C:\Users\jayac\OneDrive\Desktop\quiries-dbms\5c.sql;
+  7  /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from displa;
+
+         N
+----------
+         1
+         2
+         3
+         4
+         5
+         6
+         7
+         8
+         9
+        10
+
+10 rows selected.
+
+
+
+
+
+
+
+6.	Consider the following relation schemas
+
+Inventory
+Product_ID	Product_name	Quantity
+
+   Purchase_Record
+Product_ID	Status	Date
+
+Write a PL/SQL block to read the quantity of a product from inventory and if it is > 0 reduce the quantity by 1 and record the status of purchase of that product as ‘PURCHASED’. Otherwise record the status of purchase of that product as ‘OUT OF STOCK’. While recording the status of a purchase, record the date of transaction.
+
+
+
+create table inventory(product_id varchar2(10), product_name varchar2(10),quantity number);
+ create table purchase_record(product_id varchar2(10),status varchar2(20),  date_p date);
+
+insert into inventory values('p001','pen',3);
+insert into inventory values('p002','book',0);
+insert into inventory values('p003','key',-3);
+select * from inventory;
+declare
+	p_id varchar(10);
+	counts number;
+	cursor place is
+		select product_id, quantity from inventory;
+begin
+	open place;
+	loop
+	fetch place into p_id,counts;
+	exit when place%notfound;
+	if(counts>0) then
+		counts:=counts-1;
+		update inventory set quantity=counts where (product_id=p_id);
+		insert into purchase_record values(p_id,'purchased',sysdate);
+	else
+		insert into purchase_record values(p_id,'out of stock', sysdate);
+	end if;
+	end loop;
+end;
+
+SQL> @C:\Users\exam2\Downloads\6.sql;
+
+PRODUCT_ID PRODUCT_NA   QUANTITY
+---------- ---------- ----------
+p001       pen                 1
+p002       book                0
+p003       key                -3
+
+ 20  /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from purchase_record;
+
+PRODUCT_ID STATUS               DATE_P
+---------- -------------------- ---------
+p001       purchased            07-SEP-22
+p002       out of stock         07-SEP-22
+p003       out of stock         07-SEP-22
+
+
+
+
+
+
+
+
+
+select * from inventory;
+declare
+	p_id varchar(10) :='&p_id';
+	counts number;
+begin
+	select quantity into counts from inventory where p_id=product_id;
+	if (counts>0)  then
+		update inventory set quantity =counts-1 where product_id=p_id;
+		insert into purchase_record values(p_id,'PURCHASED',sysdate);
+	else
+		insert into purchase_record values(p_id,'OUT OF STOCK',sysdate);
+	end if;
+end;
+
+SQL>  select * from purchase_record;
+
+PRODUCT_ID STATUS               DATE_P
+---------- -------------------- ---------
+p002       OUT OF STOCK         07-SEP-22
+
+SQL>  @C:\Users\exam2\Downloads\6.sql;
+
+PRODUCT_ID PRODUCT_NA   QUANTITY
+---------- ---------- ----------
+p001       pen                 0
+p002       book                0
+p003       key                -3
+
+ 13  /
+Enter value for p_id: p003
+old   2:        p_id varchar(10) :='&p_id';
+new   2:        p_id varchar(10) :='p003';
+
+PL/SQL procedure successfully completed.
+
+
+
+
+
+7.	Create a table employee with eno, ename, and basic_pay attributes, insert 3 to 4 records and write a PL/SQL block to calculate the Gross salary & Net salary for an employee for the following conditions:
+	HRA is 15% of basic.
+	DA is 62% of basic.
+	PF is 780/- if gross salary exceeds 8000, otherwise 600/-.
+	Professional tax is 2% of basic.
+and then print the employee no, name, hra, da, pf, ptax, gross salary & net salary for that employee.
+
+create table employee( eno varchar2(10),ename varchar2(20), basic_pay varchar2(10))
+/
+
+insert into employee values('e001','jaya',60000);
+insert into employee values('e002','chandu',50000);
+insert into employee  values('e003','sri',70000);
+
+
+declare 
+	name varchar2(10);
+	enum varchar2(10);
+	bp number;
+	hra number;
+	da number;
+	pf number;
+	ptax number;
+	gs number;
+	net number;
+	cursor basic is
+		select eno,ename,basic_pay from employee;
+begin
+	open basic;
+	dbms_output.put_line('eno   '||'name      '||'hra   '||'da        '||'pf    '||'ptax  '||'gross   '||'net sal');
+	loop
+	fetch basic into enum,name,bp;
+	exit when basic%notfound;
+	hra:=0.15*bp;
+	da:=0.62*bp;
+	ptax:=0.2*bp;
+	gs:=hra+da+bp-ptax;
+	if gs>8000 then 
+	pf:=780;
+	else
+	pf:=600;
+	end if;
+	net:=gs-pf;
+	dbms_output.put_line(enum||'   '||name||'   '||hra||'   '||da||'   '||pf||'   '||ptax||'   '||gs||'   ' ||net);
+	end loop;
+end;
+SQL>  @C:\Users\exam2\Downloads\7.sql;
+ 32  /
+eno   name      hra   da        pf    ptax  gross   net sal
+e001   jaya   9000   37200   780   12000   94200   93420
+e002   chandu   7500   31000   780   10000   78500   77720
+e003   sri   10500   43400   780   14000   109900   109120
+
+PL/SQL procedure successfully completed.
+
+
+
+
+
+
+8.	Consider the following relation schemas
+Emp
+empid	name	salary	dno
+ Del_History
+dno	Rows_deleted	date
+Write a PL/SQL block to delete records of all employees who belong to a particular department and then record the dno, no of rows deleted and date on which deletion occurred in the Del_History table using implicit cursors. 
+
+create table empl(id varchar2(20),name varchar2(20), sal number, dno number)
+/
+create table history (dno number,rd number, date_ date)
+insert into empl values('e002','chandu',50000,1)
+ insert into empl values('e001','jaya',40000,2);
+ insert into empl values('e003','hari',60000,3);
+select * from empl;
+declare
+	d number:=&dno;
+	rd number;
+begin
+	delete from empl where d=dno;
+	if sql%found then
+		rd:=sql%rowcount;
+		insert into history values(d,rd,sysdate);
+	end if;
+end;
+		
+SQL> @C:\Users\exam2\Downloads\7.sql;
+
+ID                   NAME                        SAL        DNO
+-------------------- -------------------- ---------- ----------
+e001                 jaya                      40000          2
+e002                 chandu                    50000          1
+e003                 hari                      60000          3
+
+Input truncated to 2 characters
+ 12  /
+Enter value for dno: 2
+old   2:        d number:=&dno;
+new   2:        d number:=2;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from history;
+
+       DNO         RD DATE_
+---------- ---------- ---------
+         2          1 07-SEP-22
+
+
+
+
+
+
+9.	Given the table EMPLOYEE (EmpNo, Name, Salary, Designation, DeptID) write a cursor to select the five highest and lowest paid employees from the table.
+
+create table empl (eno varchar2(20), name varchar2(10), sal number, des varchar2(30), did number);
+SQL> ed
+Wrote file afiedt.buf
+
+  1* insert into table empl('&eno','&name',&sal,'&des',&did)
+SQL> ed
+Wrote file afiedt.buf
+
+  1* insert into empl values('&eno','&name',&sal,'&des',&did)
+SQL> /
+Enter value for eno: e001
+Enter value for name: jaya
+Enter value for sal: 60000
+Enter value for des: program developer
+Enter value for did: 3
+old   1: insert into empl values('&eno','&name',&sal,'&des',&did)
+new   1: insert into empl values('e001','jaya',60000,'program developer',3
+
+1 row created.
+
+SQL> /
+Enter value for eno: e002
+Enter value for name: sri
+Enter value for sal: 50000
+Enter value for des: ds
+Enter value for did: 2
+old   1: insert into empl values('&eno','&name',&sal,'&des',&did)
+new   1: insert into empl values('e002','sri',50000,'ds',2)
+
+1 row created.
+
+SQL> /
+Enter value for eno: e003
+Enter value for name: chandu
+Enter value for sal: 80000
+Enter value for des: analyst
+Enter value for did: 1
+old   1: insert into empl values('&eno','&name',&sal,'&des',&did)
+new   1: insert into empl values('e003','chandu',80000,'analyst',1)
+
+1 row created.
+
+SQL> /
+Enter value for eno: e004
+Enter value for name: lekha
+Enter value for sal: 70000
+Enter value for des: se
+Enter value for did: 6
+old   1: insert into empl values('&eno','&name',&sal,'&des',&did)
+new   1: insert into empl values('e004','lekha',70000,'se',6)
+
+1 row created.
+
+SQL> /
+Enter value for eno: e005
+Enter value for name: prav
+Enter value for sal: 70000
+Enter value for des: leader
+Enter value for did: 4
+old   1: insert into empl values('&eno','&name',&sal,'&des',&did)
+new   1: insert into empl values('e005','prav',70000,'leader',4)
+
+1 row created.
+
+SQL> /
+Enter value for eno: e006
+Enter value for name: pravee
+Enter value for sal: 30000
+Enter value for des: technician
+Enter value for did: 7
+old   1: insert into empl values('&eno','&name',&sal,'&des',&did)
+new   1: insert into empl values('e006','pravee',30000,'technician',7)
+
+1 row created.
+SQL> select * from empl;
+
+ENO                  NAME              SAL DES                                   DID
+-------------------- ---------- ---------- ------------------------------ ----------
+e001                 jaya            60000 program developer                       3
+e002                 sri             50000 ds                                      2
+e003                 chandu          80000 analyst                                 1
+e004                 lekha           70000 se                                      6
+e005                 prav            70000 leader                                  4
+e006                 pravee          30000 technician                              7
+
+6 rows selected.
+
+declare
+	ename empl.name%type;
+	s empl.sal%type;
+	i number:=1;
+	cursor l_s is
+	select name, sal from empl order by sal desc;
+	cursor s_i is
+	select name, sal from empl order by sal asc;
+begin
+	dbms_output.put_line('Top 5 largest salaries');
+	open l_s;
+	loop
+	fetch l_s into ename, s;
+	dbms_output.put_line(ename||'  -  '||s);
+	i:=i+1;
+	exit when i>5;
+	end loop;
+i:=1;
+	dbms_output.put_line('Top 5 smallest salaries');
+	open s_i;
+	loop
+	fetch s_i into ename, s;
+	dbms_output.put_line(ename||'    '||s);
+	i:=i+1;
+	exit when i>5;
+	end loop;
+end;
+
+
+Top 5 largest salaries
+chandu  -  80000
+lekha  -  70000
+prav  -  70000
+jaya  -  60000
+sri  -  50000
+Top 5 smallest salaries
+pravee    30000
+sri    50000
+jaya    60000
+lekha    70000
+prav    70000
+
+
+
+
+
+10.	Consider the following relation schemas
+
+Bank_Main
+Acc_no	Name	Address	Acc-type	Curr_balance
+Bank_Trans
+Acc_no	Tr_type	Tr_date	Tr_amt	Upd_flag
+
+Where acc_type is S – savings C- current 
+Tr_type is D – deposit W – withdrawal 
+Write a PL/SQL block to update master table’s (i.e., Bank_Main) curr_balance field with transaction details from transaction file (i.e., Bank_Trans) and also change the status of the Upd_flag field of transaction table to ‘Y’ once the updation is complete.
+
+SQL> create table bank_main(acc_no number,name varchar(20),address varchar(30),acc_type varchar(10),
+curr_bal number);
+
+Table created.
+
+SQL> insert into bank_main values('&acc_no','&name','&address','&acc_type','&curr_bal');
+Enter value for acc_no: 131
+Enter value for name: jaya
+Enter value for address: nrt
+Enter value for acc_type: savings
+Enter value for curr_bal: 60000
+old   1: insert into bank_main values('&acc_no','&name','&address','&acc_type','&curr_bal')
+new   1: insert into bank_main values('131','jaya','nrt','savings','60000')
+
+1 row created.
+
+SQL> /
+Enter value for acc_no: 172
+Enter value for name: chandu
+Enter value for address: cpt
+Enter value for acc_type: current
+Enter value for curr_bal: 70000
+old   1: insert into bank_main values('&acc_no','&name','&address','&acc_type','&curr_bal')
+new   1: insert into bank_main values('172','chandu','cpt','current','70000')
+
+1 row created.
+
+SQL> /
+Enter value for acc_no: 143
+Enter value for name: sri
+Enter value for address: nrt
+Enter value for acc_type: savings
+Enter value for curr_bal: 80000
+old   1: insert into bank_main values('&acc_no','&name','&address','&acc_type','&curr_bal')
+new   1: insert into bank_main values('143','sri','nrt','savings','80000')
+
+1 row created.
+
+SQL> /
+Enter value for acc_no: 195
+Enter value for name: pravee
+Enter value for address: ongole
+Enter value for acc_type: current
+Enter value for curr_bal: 60000
+old   1: insert into bank_main values('&acc_no','&name','&address','&acc_type','&curr_bal')
+new   1: insert into bank_main values('195','pravee','ongole','current','60000')
+
+1 row created.
+
+declare 
+	ano varchar2(20):='&ano';
+	t number:=&1_deposit_2_withdraw;
+	ta number:=&ta;
+	cb bank_main.curr_bal%type;
+	a varchar2(10);
+begin
+	select curr_bal into cb from bank_main where acc_no=ano;
+	if t=1 then 
+		cb:=cb+ta;
+		a:='diposit';
+	elsif t=2 then
+		cb:=cb-ta;
+		a:='withdraw';
+	end if;
+	update bank_main set curr_bal=cb where ano=acc_no;
+	insert into bank_trans values(ano,a,sysdate,ta,'y');
+end;
+
+
+SQL> @C:\Users\jayac\OneDrive\Desktop\10.sql;
+ 19  /
+Enter value for ano: 195
+old   2:        ano varchar2(20):='&ano';
+new   2:        ano varchar2(20):='195';
+Enter value for 1_deposit_2_withdraw: 1
+old   3:        t number:=&1_deposit_2_withdraw;
+new   3:        t number:=1;
+Enter value for ta: 2000
+old   4:        ta number:=&ta;
+new   4:        ta number:=2000;
+
+PL/SQL procedure successfully completed.
+
+
+SQL>  @C:\Users\jayac\OneDrive\Desktop\10.sql;
+ 19  /
+Enter value for ano: 131
+old   2:        ano varchar2(20):='&ano';
+new   2:        ano varchar2(20):='131';
+Enter value for 1_deposit_2_withdraw: 2
+old   3:        t number:=&1_deposit_2_withdraw;
+new   3:        t number:=2;
+Enter value for ta: 5000
+old   4:        ta number:=&ta;
+new   4:        ta number:=5000;
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for ano: 172
+old   2:        ano varchar2(20):='&ano';
+new   2:        ano varchar2(20):='172';
+Enter value for 1_deposit_2_withdraw: 1
+old   3:        t number:=&1_deposit_2_withdraw;
+new   3:        t number:=1;
+Enter value for ta: 8000
+old   4:        ta number:=&ta;
+new   4:        ta number:=8000;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from bank_trans;
+
+    ACC_NO TR_TYPE    TR_DATE       TR_AMT UPD_F
+---------- ---------- --------- ---------- -----
+       195 diposit    14-SEP-22       2000 y
+       131 withdraw   14-SEP-22       5000 y
+       172 diposit    14-SEP-22       8000 y
+SQL> select * from bank_main;
+
+    ACC_NO NAME                 ADDRESS                        ACC_TYPE     CURR_BAL
+---------- -------------------- ------------------------------ ---------- ----------
+       131 jaya                 nrt                            savings         55000
+       172 chandu               cpt                            current         78000
+       143 sri                  nrt                            savings         80000
+       195 pravee               ongole                         current         62000
+
+
+
+
+
+11.	Write a PL/SQL block to handle the following built-in exceptions
+no_data_found
+too_many_rows
+zero_divide  
+declare
+	i number:=&i;
+	a number:=10;
+	n bank_main.name%type;
+begin
+	if i=1 then
+	select name into n from bank_main;
+	elsif i=2 then
+	select name into n from bank_main where address='macharla';
+	else
+	a:=a/0;
+	end if;
+exception
+	
+	when no_data_found then
+	dbms_output.put_line('no data found');
+	when zero_divide then
+	dbms_output.put_line('zero divide');
+	when too_many_rows then
+	dbms_output.put_line('to many rows to fetch');
+end;
+	
+SQL> @C:\Users\jayac\OneDrive\Desktop\11.sql;
+ 22  /
+Enter value for i: 2
+old   2:        i number:=&i;
+new   2:        i number:=2;
+no data found
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for i: 1
+old   2:        i number:=&i;
+new   2:        i number:=1;
+to many rows to fetch
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for i: 3
+old   2:        i number:=&i;
+new   2:        i number:=3;
+zero divide
+
+PL/SQL procedure successfully completed.
+
+
+
+
+
+12.	Write a PL/SQL block to check whether the quantity of any product in Inventory table is < 0. If so, using an exception display relevant message and update quantity to 0.
+
+Inventory
+Product_ID	Product_name	Quantity
+
+SQL> select * from inventory;
+
+PRODUCT_ID PRODUCT_NA   QUANTITY
+---------- ---------- ----------
+p001       pen                 3
+p002       book                0
+p003       key                -3
+
+declare 
+	q inventory.quantity%type;
+	cursor c_q is
+		select quantity into q from inventory;
+begin
+	open c_q;
+	loop
+	fetch c_q into q;
+	if q<0 then
+	update inventory set quantity=0 where quantity<0;
+	end if;
+	exit when c_q%notfound;
+	end loop;
+end;
+SQL> @C:\Users\jayac\OneDrive\Desktop\12.sql;
+ 15  /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from inventory;
+
+PRODUCT_ID PRODUCT_NA   QUANTITY
+---------- ---------- ----------
+p001       pen                 3
+p002       book                0
+p003       key                 0
