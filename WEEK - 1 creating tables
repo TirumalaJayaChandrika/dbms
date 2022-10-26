@@ -1,0 +1,203 @@
+1.	Create the tables in the database.
+SQL> 
+create table course1(course_name varchar2(20), course_id varchar2(20), dept varchar2(10))
+SQL> /
+
+Table created.
+create table student1(name varchar2(20), id varchar2(20), semester number)
+SQL> /
+
+Table created.
+
+SQL>create table grade(id varchar2(20), semester number,course varchar2(20),grade varchar2(3) )
+SQL> /
+
+Table created.
+
+
+SQL> 
+alter table course1 add instructor varchar2(20)
+SQL> /
+
+Table altered.
+2. Alter the course table by adding a new attribute instructor.
+SQL> desc course1;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSE_NAME                                        VARCHAR2(20)
+ COURSE_ID                                          VARCHAR2(20)
+ DEPT                                               VARCHAR2(10)
+ INSTRUCTOR                                         VARCHAR2(20)
+2.	Alter the student table by modifying the datatype of Student_ID
+  1* alter table student1 modify id number
+SQL> /
+
+Table altered.
+
+SQL> desc student1;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ NAME                                               VARCHAR2(20)
+ ID                                                 NUMBER
+ SEMESTER                                           NUMBER
+4. Alter the course table by dropping instructor attribute.
+
+  1* alter table course1 drop column instructor
+SQL> /
+
+Table altered.
+
+SQL> desc course1;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COURSE_NAME                                        VARCHAR2(20)
+ COURSE_ID                                          VARCHAR2(20)
+ DEPT                                               VARCHAR2(10)
+ 5. Show the structure of the grade table. 
+
+SQL> desc grade;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 VARCHAR2(20)
+ SEMESTER                                           NUMBER
+ COURSE                                             VARCHAR2(20)
+ GRADE                                              VARCHAR2(3)
+6. Load the database with data using insert statements.
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* insert into course1 values('dbms', 'cs222', 'cse')
+SQL> /
+
+1 row created.
+
+SQL> insert into course1 values('ds','cs212','cse');
+
+1 row created.
+
+SQL> insert into student1 values('jaya',178,4);
+
+1 row created.
+
+SQL> insert into student1 values('sri',193,4);
+
+1 row created.
+
+ 7. Retrieve the contents of a table using select statements.
+
+SQL> select * from student1;
+
+NAME                         ID   SEMESTER
+-------------------- ---------- ----------
+jaya                        178          4
+sri                         193          4
+
+SQL> select course_name,course_id from course1;
+
+COURSE_NAME          COURSE_ID
+-------------------- --------------------
+dbms                 cs222
+ds                   cs212
+
+SQL> select * from grade;
+
+no rows selected
+ 8. Modify the contents of tables using update statements.
+
+SQL> update student1 set name='chandu' where id=178;
+
+1 row updated.
+
+SQL> update course1 set course_id='cs213' where course_name='ds';
+
+1 row updated.
+
+SQL> select * from student1;
+
+NAME                         ID   SEMESTER
+-------------------- ---------- ----------
+chandu                      178          4
+sri                         193          4
+
+SQL> select * from course1;
+
+COURSE_NAME          COURSE_ID            DEPT
+-------------------- -------------------- ----------
+dbms                 cs222                cse
+ds                   cs213                cse
+ 9. Delete selected records from the tables.
+SQL> delete from course1 where course_id='cs213';
+
+1 row deleted.
+
+SQL> select * from course1;
+
+COURSE_NAME          COURSE_ID            DEPT
+-------------------- -------------------- ----------
+dbms                 cs222                cse
+
+SQL> delete from student1 where id=193;
+
+1 row deleted.
+
+SQL> select * from student1;
+
+NAME                         ID   SEMESTER
+-------------------- ---------- ----------
+chandu                      178          4
+
+SQL> delete from student1;
+
+1 row deleted.
+ 10. Truncate a table.
+SQL> select * from student1;
+
+NAME                         ID   SEMESTER
+-------------------- ---------- ----------
+jaya                        178          4
+sri                         193          4
+
+
+SQL> truncate table student1;
+
+Table truncated.
+
+SQL> desc student1;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ NAME                                               VARCHAR2(20)
+ ID                                                 NUMBER
+ SEMESTER                                           NUMBER 
+11. Drop a table. 
+SQL> drop table student1;
+
+Table dropped.
+
+SQL> desc student1;
+ERROR:
+ORA-04043: object student1 does not exist
+12. Commit the changes made to the database
+SQL> insert into course1 values('dbms', 'cs222', 'cse');
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select * from course1;
+
+COURSE_NAME          COURSE_ID            DEPT
+-------------------- -------------------- ----------
+dbms                 cs222                cse
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> select * from course1;
+
+COURSE_NAME          COURSE_ID            DEPT
+-------------------- -------------------- ----------
+dbms                 cs222                cse
