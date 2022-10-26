@@ -1,0 +1,135 @@
+Week-4
+I. Write SQL Select Statements using Aggregate Functions, Group By and Having clauses for the following queries that retrieve data from university database: 
+1. Find the maximum and average capacity of buildings in the university.
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select max(capacity) ,avg(capacity)from classroom
+SQL> /
+
+MAX(CAPACITY) AVG(CAPACITY)
+------------- -------------
+          500           132
+ 2. Display the least budget of the departments. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select dept_name,budget from department where budget in(select min(budget) min_bu from department)
+SQL> /
+
+DEPT_NAME                BUDGET
+-------------------- ----------
+History                   50000
+3. Find the total number of courses and credits offered by Biology department. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select count(distinct course_id), sum(credits) from course where dept_name='Biology'
+SQL> /
+
+COUNT(DISTINCTCOURSE_ID) SUM(CREDITS)
+------------------------ ------------
+                       3           11
+4. Find the average salary of instructors in the Computer Science department. 
+select dept_name ,avg(salary) from instructor group by dept_name having dept_name like '%Comp%'
+/
+
+DEPT_NAME            AVG(SALARY)
+-------------------- -----------
+Comp. Sci.            77333.3333
+5. Find the total number of instructors who teach a course in the Spring 2010 semester. 
+select count(distinct i.name) from instructor i,teaches t where t.id=i.id and semester='Spring' and year=2010
+/
+COUNT(DISTINCTI.NAME)
+---------------------
+                    6
+6. Find the average salary in each department. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select dept_name,avg(salary) from instructor group by dept_name
+SQL> /
+
+DEPT_NAME            AVG(SALARY)
+-------------------- -----------
+Elec. Eng.                 80000
+Physics                    91000
+Comp. Sci.            77333.3333
+Finance                    85000
+Biology                    72000
+Music                      40000
+History                    61000
+
+7 rows selected.
+7. Find the number of instructors in each department who teach a course in the Spring 2010 semester. 
+select dept_name,count(distinct name) from instructor i, teaches t where t.id=i.id and semester='Spring' and year=2010 group by dept_name 
+/
+DEPT_NAME            COUNT(NAME)
+-------------------- -----------
+Comp. Sci.                     3
+Finance                        1
+Music                          1
+History                        1
+8. Find the department name and average salary of the department for only those departments where the average salary of the instructors is more than $42,000. 
+select dept_name , avg(salary) from instructor group by dept_name having avg(salary)>42000
+/
+DEPT_NAME            AVG(SALARY)
+-------------------- -----------
+Elec. Eng.                 80000
+Physics                    91000
+Comp. Sci.            77333.3333
+Finance                    85000
+Biology                    72000
+History                    61000
+
+6 rows selected.
+9. For each course section offered in 2009, find the average total credits (tot_cred) of all students enrolled in the section, if the section had at least 2 students. 
+select course_id, sec_id from takes t, student s where t.id=s.id and year=2009 group by course_id, sec_id having count(t.id)>=2
+/
+COURSE_I SEC_ID
+-------- --------
+CS-347   1
+CS-101   1
+CS-190   2
+10. For each department, find the maximum salary of instructors in that department. You may assume that every department has at least one instructor. 
+select dept_name, max(salary) from instructor group by dept_name
+//
+DEPT_NAME            MAX(SALARY)
+-------------------- -----------
+Elec. Eng.                 80000
+Physics                    95000
+Comp. Sci.                 92000
+Finance                    90000
+Biology                    72000
+Music                      40000
+History                    62000
+
+7 rows selected.
+11. For the student with ID 12345 (or any other value), show the total number of credits scored for all courses (taken by that student). Don't display the tot_creds value from the student table, you should use SQL aggregation on courses taken by the student. 
+select distinct id , tot_cred from takes ,(select sum(credits) tot_cred from takes t ,course c where t.id=12345 and t.course_id=c.course_id) where id=12345
+//
+ID      TOT_CRED
+----- ----------
+12345         14
+12. Display the total credits for each of the students, along with the ID of the student; don't bother about the name of the student. (Don't display the tot_creds value from the student table, you should use SQL aggregation on courses taken by the student. For students who have not registered for any course, tot_creds should be 0)
+select distinct s.id ,sum(credits) from takes t, course c, student s where t.course_id=c.course_id(+)  and s.id=t.id(+) group by s.id
+ID    SUM(CREDITS)
+----- ------------
+00128            7
+12345           14
+19991            3
+23121            3
+44553            4
+45678           11
+54321            8
+55739            3
+70557
+76543            7
+76653            3
+
+ID    SUM(CREDITS)
+----- ------------
+98765            7
+98988            8
+
+13 rows selected.
