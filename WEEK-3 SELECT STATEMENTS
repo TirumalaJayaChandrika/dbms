@@ -1,0 +1,724 @@
+SQL> select * from instructor
+  2  ;
+
+ID    NAME                 DEPT_NAME                SALARY
+----- -------------------- -------------------- ----------
+10101 Srinivasan           Comp. Sci.                65000
+12121 Wu                   Finance                   90000
+15151 Mozart               Music                     40000
+22222 Einstein             Physics                   95000
+32343 El Said              History                   60000
+33456 Gold                 Physics                   87000
+45565 Katz                 Comp. Sci.                75000
+58583 Califieri            History                   62000
+76543 Singh                Finance                   80000
+76766 Crick                Biology                   72000
+83821 Brandt               Comp. Sci.                92000
+
+ID    NAME                 DEPT_NAME                SALARY
+----- -------------------- -------------------- ----------
+98345 Kim                  Elec. Eng.                80000
+
+12 rows selected.
+
+
+SQL> select * from instructor
+  2  ;
+
+ID    NAME                 DEPT_NAME                SALARY
+----- -------------------- -------------------- ----------
+10101 Srinivasan           Comp. Sci.                65000
+12121 Wu                   Finance                   90000
+15151 Mozart               Music                     40000
+22222 Einstein             Physics                   95000
+32343 El Said              History                   60000
+33456 Gold                 Physics                   87000
+45565 Katz                 Comp. Sci.                75000
+58583 Califieri            History                   62000
+76543 Singh                Finance                   80000
+76766 Crick                Biology                   72000
+83821 Brandt               Comp. Sci.                92000
+
+ID    NAME                 DEPT_NAME                SALARY
+----- -------------------- -------------------- ----------
+98345 Kim                  Elec. Eng.                80000
+
+12 rows selected.
+
+
+  1* select * from course
+SQL> /
+
+COURSE_I TITLE                                              DEPT_NAME               CREDITS
+-------- -------------------------------------------------- -------------------- ----------
+BIO-101  Intro. to Biology                                  Biology                       4
+BIO-301  Genetics                                           Biology                       4
+BIO-399  Computational Biology                              Biology                       3
+CS-101   Intro. to Computer Science                         Comp. Sci.                    4
+CS-190   Game Design                                        Comp. Sci.                    4
+CS-315   Robotics                                           Comp. Sci.                    3
+CS-319   Image Processing                                   Comp. Sci.                    3
+CS-347   Database System Concepts                           Comp. Sci.                    3
+EE-181   Intro. to Digital Systems                          Elec. Eng.                    3
+FIN-201  Investment Banking                                 Finance                       3
+HIS-351  World History                                      History                       3
+MU-199   Music Video Production                             Music                         3
+PHY-101  Physical Principles                                Physics                       4
+
+13 rows selected.
+  1* select * from course
+SQL> /
+
+COURSE_I TITLE                                              DEPT_NAME               CREDITS
+-------- -------------------------------------------------- -------------------- ----------
+BIO-101  Intro. to Biology                                  Biology                       4
+BIO-301  Genetics                                           Biology                       4
+BIO-399  Computational Biology                              Biology                       3
+CS-101   Intro. to Computer Science                         Comp. Sci.                    4
+CS-190   Game Design                                        Comp. Sci.                    4
+CS-315   Robotics                                           Comp. Sci.                    3
+CS-319   Image Processing                                   Comp. Sci.                    3
+CS-347   Database System Concepts                           Comp. Sci.                    3
+EE-181   Intro. to Digital Systems                          Elec. Eng.                    3
+FIN-201  Investment Banking                                 Finance                       3
+HIS-351  World History                                      History                       3
+MU-199   Music Video Production                             Music                         3
+PHY-101  Physical Principles                                Physics                       4
+
+13 rows selected.
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+DEPT                           TABLE
+EMP                            TABLE
+BONUS                          TABLE
+SALGRADE                       TABLE
+CLASSROOM                      TABLE
+DEPARTMENT                     TABLE
+COURSE                         TABLE
+INSTRUCTOR                     TABLE
+SECTION                        TABLE
+TEACHES                        TABLE
+STUDENT                        TABLE
+TAKES                          TABLE
+ADVISOR                        TABLE
+TIME_SLOT                      TABLE
+PREREQ                         TABLE
+STUDENT1                       TABLE
+BIN$l9WI3nkaSOOoHdjuRRrfrw==$0 TABLE
+GRADE                          TABLE
+COURSE1                        TABLE
+
+19 rows selected.
+
+SQL> select * from takes;
+
+ID    COURSE_I SEC_ID   SEMEST       YEAR GR
+----- -------- -------- ------ ---------- --
+00128 CS-101   1        Fall         2009 A
+00128 CS-347   1        Fall         2009 A-
+12345 CS-101   1        Fall         2009 C
+12345 CS-190   2        Spring       2009 A
+12345 CS-315   1        Spring       2010 A
+12345 CS-347   1        Fall         2009 A
+19991 HIS-351  1        Spring       2010 B
+23121 FIN-201  1        Spring       2010 C+
+44553 PHY-101  1        Fall         2009 B-
+45678 CS-101   1        Fall         2009 F
+45678 CS-101   1        Spring       2010 B+
+45678 CS-319   1        Spring       2010 B
+54321 CS-101   1        Fall         2009 A-
+54321 CS-190   2        Spring       2009 B+
+55739 MU-199   1        Spring       2010 A-
+76543 CS-101   1        Fall         2009 A
+76543 CS-319   2        Spring       2010 A
+76653 EE-181   1        Spring       2009 C
+98765 CS-101   1        Fall         2009 C-
+98765 CS-315   1        Spring       2010 B
+98988 BIO-101  1        Summer       2009 A
+98988 BIO-301  1        Summer       2010
+
+22 rows selected.
+
+SQL> select * from section;
+
+COURSE_I SEC_ID   SEMEST       YEAR BUILDING        ROOM_NU TIME
+-------- -------- ------ ---------- --------------- ------- ----
+BIO-101  1        Summer       2009 Painter         514     B
+BIO-301  1        Summer       2010 Painter         514     A
+CS-101   1        Fall         2009 Packard         101     H
+CS-101   1        Spring       2010 Packard         101     F
+CS-190   1        Spring       2009 Taylor          3128    E
+CS-190   2        Spring       2009 Taylor          3128    A
+CS-315   1        Spring       2010 Watson          120     D
+CS-319   1        Spring       2010 Watson          100     B
+CS-319   2        Spring       2010 Taylor          3128    C
+CS-347   1        Fall         2009 Taylor          3128    A
+EE-181   1        Spring       2009 Taylor          3128    C
+FIN-201  1        Spring       2010 Packard         101     B
+HIS-351  1        Spring       2010 Painter         514     C
+MU-199   1        Spring       2010 Packard         101     D
+PHY-101  1        Fall         2009 Watson          100     A
+
+15 rows selected.
+
+SQL> select * from teaches;
+
+ID    COURSE_I SEC_ID   SEMEST       YEAR
+----- -------- -------- ------ ----------
+10101 CS-101   1        Fall         2009
+10101 CS-315   1        Spring       2010
+10101 CS-347   1        Fall         2009
+12121 FIN-201  1        Spring       2010
+15151 MU-199   1        Spring       2010
+22222 PHY-101  1        Fall         2009
+32343 HIS-351  1        Spring       2010
+45565 CS-101   1        Spring       2010
+45565 CS-319   1        Spring       2010
+76766 BIO-101  1        Summer       2009
+76766 BIO-301  1        Summer       2010
+83821 CS-190   1        Spring       2009
+83821 CS-190   2        Spring       2009
+83821 CS-319   2        Spring       2010
+98345 EE-181   1        Spring       2009
+
+15 rows selected.
+SQL> select * from department;
+
+DEPT_NAME            BUILDING            BUDGET
+-------------------- --------------- ----------
+Biology              Watson               90000
+Comp. Sci.           Taylor              100000
+Elec. Eng.           Taylor               85000
+Finance              Painter             120000
+History              Painter              50000
+Music                Packard              80000
+Physics              Watson               70000
+
+7 rows selected.
+SQL> select name from instructor;
+
+NAME
+--------------------
+Srinivasan
+Wu
+Mozart
+Einstein
+El Said
+Gold
+Katz
+Califieri
+Singh
+Crick
+Brandt
+
+NAME
+--------------------
+Kim
+
+12 rows selected.
+
+SQL> select name from instructor where dept_name='Biology';
+
+NAME
+--------------------
+Crick
+
+4. Find the names of all instructors in the Computer Science department who have salaries greater than $70,000.
+SQL> select name from instructor where dept_name like '%Comp.%' and salary>70000;
+
+NAME
+--------------------
+Katz
+Brandt
+5. Find the names of courses in Computer science department which have 3 credits
+  1* select title from course where dept_name like   'Comp. Sc%' and credits=3
+SQL> /
+
+TITLE
+--------------------------------------------------
+Robotics
+Image Processing
+Database System Concepts
+6. Find the names of the instructors, their present salaries and the resulting salaries if they were given a 10% raise. 
+
+  1* select name, salary ,(1.1)*salary res_sal from instructor
+SQL> /
+
+NAME                     SALARY    RES_SAL
+-------------------- ---------- ----------
+Srinivasan                65000      71500
+Wu                        90000      99000
+Mozart                    40000      44000
+Einstein                  95000     104500
+El Said                   60000      66000
+Gold                      87000      95700
+Katz                      75000      82500
+Califieri                 62000      68200
+Singh                     80000      88000
+Crick                     72000      79200
+Brandt                    92000     101200
+Kim                       80000      88000
+
+12 rows selected.
+
+SQL>
+7. Find the names of instructors with salary amounts between $90,000 and $100,000, 
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select name  from instructor where salary  between 90000 and 100000
+SQL> /
+
+NAME
+--------------------
+Wu
+Einstein
+Brandt
+8. Find all instructors whose salary is unknown. 
+SQL> select name from instructor where salary is null;
+
+no rows selected
+9. Find the names of all departments whose building name includes the substring ‘Watson’. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select dept_name from department where building like '%Watson%'
+SQL> /
+
+DEPT_NAME
+--------------------
+Biology
+Physics
+10. Find departments whose names contain the string “sci” as a substring, regardless of the case. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select dept_name from department where lower(dept_name) like '%sci%'
+SQL> /
+
+DEPT_NAME
+--------------------
+Comp. Sci.
+11. List the names of all instructors in the Physics department in alphabetic order.
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select name from instructor where dept_name='Physics' order by name asc
+SQL> /
+
+NAME
+--------------------
+Einstein
+Gold
+ 12. List the entire instructor relation in descending order of salary. If several instructors have the same salary, order them in ascending order by name. 
+
+  1* select * from instructor  order by salary desc , name asc
+SQL> /
+
+ID    NAME                 DEPT_NAME                SALARY
+----- -------------------- -------------------- ----------
+22222 Einstein             Physics                   95000
+83821 Brandt               Comp. Sci.                92000
+12121 Wu                   Finance                   90000
+33456 Gold                 Physics                   87000
+98345 Kim                  Elec. Eng.                80000
+76543 Singh                Finance                   80000
+45565 Katz                 Comp. Sci.                75000
+76766 Crick                Biology                   72000
+10101 Srinivasan           Comp. Sci.                65000
+58583 Califieri            History                   62000
+32343 El Said              History                   60000
+15151 Mozart               Music                     40000
+
+12 rows selected.
+III. Write SQL queries for retrieving data from multiple tables using Joins:
+ 1. Find all possible combinations of instructors and the courses they teach.
+  1* select name,course_id from instructor
+SQL> /
+
+NAME                 COURSE_I
+-------------------- --------
+Srinivasan           CS-101
+Srinivasan           CS-315
+Srinivasan           CS-347
+Srinivasan           FIN-201
+Srinivasan           MU-199
+Srinivasan           PHY-101
+Srinivasan           HIS-351
+Srinivasan           CS-101
+Srinivasan           CS-319
+Srinivasan           BIO-101
+Srinivasan           BIO-301
+Srinivasan           CS-190
+Srinivasan           CS-190
+Srinivasan           CS-319
+Srinivasan           EE-181
+Wu                   CS-101
+Wu                   CS-315
+Wu                   CS-347
+Wu                   FIN-201
+Wu                   MU-199
+Wu                   PHY-101
+Wu                   HIS-351
+Wu                   CS-101
+Wu                   CS-319
+Wu                   BIO-101
+Wu                   BIO-301
+Wu                   CS-190
+Wu                   CS-190
+Wu                   CS-319
+Wu                   EE-181
+Mozart               CS-101
+Mozart               CS-315
+Mozart               CS-347
+Mozart               FIN-201
+Mozart               MU-199
+Mozart               PHY-101
+Mozart               HIS-351
+Mozart               CS-101
+Mozart               CS-319
+Mozart               BIO-101
+Mozart               BIO-301
+Mozart               CS-190
+Mozart               CS-190
+Mozart               CS-319
+Mozart               EE-181
+Einstein             CS-101
+Einstein             CS-315
+Einstein             CS-347
+Einstein             FIN-201
+Einstein             MU-199
+Einstein             PHY-101
+Einstein             HIS-351
+Einstein             CS-101
+Einstein             CS-319
+Einstein             BIO-101
+Einstein             BIO-301
+Einstein             CS-190
+Einstein             CS-190
+Einstein             CS-319
+Einstein             EE-181
+El Said              CS-101
+El Said              CS-315
+El Said              CS-347
+El Said              FIN-201
+El Said              MU-199
+El Said              PHY-101
+El Said              HIS-351
+El Said              CS-101
+El Said              CS-319
+El Said              BIO-101
+El Said              BIO-301
+El Said              CS-190
+El Said              CS-190
+El Said              CS-319
+El Said              EE-181
+Gold                 CS-101
+Gold                 CS-315
+Gold                 CS-347
+Gold                 FIN-201
+Gold                 MU-199
+Gold                 PHY-101
+Gold                 HIS-351
+Gold                 CS-101
+Gold                 CS-319
+Gold                 BIO-101
+Gold                 BIO-301
+Gold                 CS-190
+Gold                 CS-190
+Gold                 CS-319
+Gold                 EE-181
+Katz                 CS-101
+Katz                 CS-315
+Katz                 CS-347
+Katz                 FIN-201
+Katz                 MU-199
+Katz                 PHY-101
+Katz                 HIS-351
+Katz                 CS-101
+Katz                 CS-319
+Katz                 BIO-101
+Katz                 BIO-301
+Katz                 CS-190
+Katz                 CS-190
+Katz                 CS-319
+Katz                 EE-181
+Califieri            CS-101
+Califieri            CS-315
+Califieri            CS-347
+Califieri            FIN-201
+Califieri            MU-199
+Califieri            PHY-101
+Califieri            HIS-351
+Califieri            CS-101
+Califieri            CS-319
+Califieri            BIO-101
+Califieri            BIO-301
+Califieri            CS-190
+Califieri            CS-190
+Califieri            CS-319
+Califieri            EE-181
+Singh                CS-101
+Singh                CS-315
+Singh                CS-347
+Singh                FIN-201
+Singh                MU-199
+Singh                PHY-101
+Singh                HIS-351
+Singh                CS-101
+Singh                CS-319
+Singh                BIO-101
+Singh                BIO-301
+Singh                CS-190
+Singh                CS-190
+Singh                CS-319
+Singh                EE-181
+Crick                CS-101
+Crick                CS-315
+Crick                CS-347
+Crick                FIN-201
+Crick                MU-199
+Crick                PHY-101
+Crick                HIS-351
+Crick                CS-101
+Crick                CS-319
+Crick                BIO-101
+Crick                BIO-301
+Crick                CS-190
+Crick                CS-190
+Crick                CS-319
+Crick                EE-181
+Brandt               CS-101
+Brandt               CS-315
+Brandt               CS-347
+Brandt               FIN-201
+Brandt               MU-199
+Brandt               PHY-101
+Brandt               HIS-351
+Brandt               CS-101
+Brandt               CS-319
+Brandt               BIO-101
+Brandt               BIO-301
+Brandt               CS-190
+Brandt               CS-190
+Brandt               CS-319
+Brandt               EE-181
+Kim                  CS-101
+Kim                  CS-315
+Kim                  CS-347
+Kim                  FIN-201
+Kim                  MU-199
+Kim                  PHY-101
+Kim                  HIS-351
+Kim                  CS-101
+Kim                  CS-319
+Kim                  BIO-101
+Kim                  BIO-301
+Kim                  CS-190
+Kim                  CS-190
+Kim                  CS-319
+Kim                  EE-181
+
+180 rows selected.
+ 2. Retrieve the names of all instructors, along with their department names and department building name.
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select name, i.dept_name,d.building from instructor i,department d where i.dept_name=d.dept_nam
+SQL> /
+
+NAME                 DEPT_NAME            BUILDING
+-------------------- -------------------- ---------------
+Srinivasan           Comp. Sci.           Taylor
+Wu                   Finance              Painter
+Mozart               Music                Packard
+Einstein             Physics              Watson
+El Said              History              Painter
+Gold                 Physics              Watson
+Katz                 Comp. Sci.           Taylor
+Califieri            History              Painter
+Singh                Finance              Painter
+Crick                Biology              Watson
+Brandt               Comp. Sci.           Taylor
+Kim                  Elec. Eng.           Taylor
+
+12 rows selected.
+ 3. Find the names of instructors who have taught at least one course. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select distinct name from instructor i, teaches t where i.id=t.id
+SQL> /
+
+NAME
+--------------------
+Einstein
+Crick
+El Said
+Srinivasan
+Brandt
+Wu
+Kim
+Mozart
+Katz
+
+9 rows selected.
+4. For the student with ID 12345 (or any other value), show all course_id and title of all courses registered for by the student.
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select t.course_id,title from takes t,course c where c.course_id=t.course_id and id=1234
+SQL> /
+
+COURSE_I TITLE
+-------- --------------------------------------------------
+CS-101   Intro. to Computer Science
+CS-190   Game Design
+CS-315   Robotics
+CS-347   Database System Concepts
+ 5. Find instructor names and course identifiers for instructors in the Computer Science department. SQL> ed
+Wrote file afiedt.buf
+
+  1* select name, course_id from instructor i , teaches t where t.id=i.id and dept_name like '%Comp. S%’
+SQL> /
+
+NAME                 COURSE_I
+-------------------- --------
+Srinivasan           CS-101
+Srinivasan           CS-315
+Srinivasan           CS-347
+Katz                 CS-101
+Katz                 CS-319
+Brandt               CS-190
+Brandt               CS-190
+Brandt               CS-319
+8 rows selected.
+6. For all instructors in the university who have taught some course, find their names and the course ID of all courses they taught.
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select name, course_id from instructor i , teaches t where t.id=i.id
+SQL> /
+
+NAME                 COURSE_I
+-------------------- --------
+Srinivasan           CS-101
+Srinivasan           CS-315
+Srinivasan           CS-347
+Wu                   FIN-201
+Mozart               MU-199
+Einstein             PHY-101
+El Said              HIS-351
+Katz                 CS-101
+Katz                 CS-319
+Crick                BIO-101
+Crick                BIO-301
+Brandt               CS-190
+Brandt               CS-190
+Brandt               CS-319
+Kim                  EE-181
+
+15 rows selected.
+ 7. Find the names of all instructors whose salary is greater than at least one instructor in the Biology department. Or Find the names of all instructors who earn more than the lowest paid instructor in the Biology department.
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select name from instructor where salary>(select min(salary) from instructor where dept_name like 'Biology')
+SQL> /
+
+NAME
+--------------------
+Wu
+Einstein
+Gold
+Katz
+Singh
+Brandt
+Kim
+
+7 rows selected.
+ 8. Find full details of instructors who teach at least one course. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select distinct i.* from instructor i , teaches t where t.id=i.id
+SQL> /
+
+ID    NAME                 DEPT_NAME                SALARY
+----- -------------------- -------------------- ----------
+10101 Srinivasan           Comp. Sci.                65000
+98345 Kim                  Elec. Eng.                80000
+15151 Mozart               Music                     40000
+45565 Katz                 Comp. Sci.                75000
+76766 Crick                Biology                   72000
+32343 El Said              History                   60000
+22222 Einstein             Physics                   95000
+83821 Brandt               Comp. Sci.                92000
+12121 Wu                   Finance                   90000
+
+9 rows selected. 
+9. Find the instructor names and the courses they taught for all instructors in the Biology department who have taught some course. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select distinct name from instructor i, teaches t where i.id=t.id and i.dept_name='Biology'
+SQL> /
+
+NAME
+--------------------
+Crick 
+10. Find the set of all courses taught either in Fall 2009 or in Spring 2010, or both. 
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select distinct course_id from teaches where (semester,year)in(('Fall',2009) ,('Spring', 2010))
+SQL> /
+
+COURSE_I
+--------
+HIS-351
+CS-101
+CS-347
+FIN-201
+CS-319
+PHY-101
+CS-315
+MU-199
+
+8 rows selected. 
+11. Find all courses taught in the Fall 2009 semester but not in the Spring 2010 semester. 
+select distinct course_id from teaches where semester='Fall' and year=2009 minus (select distinct course_id from teaches where semester='Spring' and year= 2010)
+/ 
+COURSE_I
+--------
+CS-347
+PHY-101 
+12. Find the names of all students who have taken any Comp. Sci. course ever. (there should be no duplicate names) 
+select distinct s.name from student s, takes t where s.id=t.id and s.dept_name like '%Comp. S%'
+/
+SQL> /
+
+NAME
+--------------------
+Zhang
+Brown
+Shankar
+Williams
+
+13. Display the IDs of all instructors who have never taught a course. (Don’t write nested query
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select distinct id from instructor i minus select distinct id from teaches
+SQL> /
+
+ID
+-----
+33456
+58583
+76543
+
