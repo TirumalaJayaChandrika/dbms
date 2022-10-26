@@ -84,13 +84,20 @@ History                    61000
 
 6 rows selected.
 9. For each course section offered in 2009, find the average total credits (tot_cred) of all students enrolled in the section, if the section had at least 2 students. 
-select course_id, sec_id from takes t, student s where t.id=s.id and year=2009 group by course_id, sec_id having count(t.id)>=2
-/
-COURSE_I SEC_ID
--------- --------
-CS-347   1
-CS-101   1
-CS-190   2
+select sec_id, avg(tot_cred) 
+from takes t,student s 
+where s.id=t.id and year=2009 
+group by t.sec_id 
+having count(t.sec_id)>=2
+
+
+
+SEC_ID   AVG(TOT_CRED)
+-------- -------------
+1           69.0909091
+2                   43
+
+
 10. For each department, find the maximum salary of instructors in that department. You may assume that every department has at least one instructor. 
 select dept_name, max(salary) from instructor group by dept_name
 //
@@ -111,8 +118,20 @@ select distinct id , tot_cred from takes ,(select sum(credits) tot_cred from tak
 ID      TOT_CRED
 ----- ----------
 12345         14
-12. Display the total credits for each of the students, along with the ID of the student; don't bother about the name of the student. (Don't display the tot_creds value from the student table, you should use SQL aggregation on courses taken by the student. For students who have not registered for any course, tot_creds should be 0)
-select distinct s.id ,sum(credits) from takes t, course c, student s where t.course_id=c.course_id(+)  and s.id=t.id(+) group by s.id
+12. Display the total credits for each of the students, along with the ID of the student; don't bother about the name of the student. 
+(Don't display the tot_creds value from the student table, you should use SQL aggregation on courses taken by the student.
+For students who have not registered for any course, tot_creds should be 0)
+
+
+
+select id,sum(c.credits) 
+from course c,takes a
+where c.course_id=a.course_id 
+group by a.id 
+union 
+select s.id,0 from student s 
+where s.id not in(select id from takes)
+/
 ID    SUM(CREDITS)
 ----- ------------
 00128            7
@@ -123,7 +142,7 @@ ID    SUM(CREDITS)
 45678           11
 54321            8
 55739            3
-70557
+70557            0
 76543            7
 76653            3
 
