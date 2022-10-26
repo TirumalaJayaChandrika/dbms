@@ -1,0 +1,113 @@
+create table course1 (course_name varchar2(20) unique, course_id varchar2(20) primary key ,department varchar2(10) default ‘cse’)
+/
+create table student1 (name varchar2(20) not null, id varchar2(20) primary key,course_id varchar2(10) references course1(course_id) , semester number)
+/ SQL> ed
+Wrote file afiedt.buf
+
+  1* create table grade(id varchar2(10), semester number, course varchar2(20), grade number  check(g rade>=5 and grade<=10))
+
+SQL> /
+
+Table created.
+
+2. Write insert statements that violate the constraints specified in problem 1.
+
+SQL>  insert into course1(course_name, course_id) values ('dbms', 'cs222');
+
+1 row created.
+
+SQL> select * from course1;
+
+COURSE_NAME          COURSE_ID            DEPARTMENT
+-------------------- -------------------- ----------
+dbms                 cs222                cse
+
+SQL> insert into course1(course_name, course_id) values ('dbms', 'cs222');
+insert into course1(course_name, course_id) values ('dbms', 'cs222')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C005458) violated
+
+
+SQL> insert into course1(course_name) values ('ds');
+insert into course1(course_name) values ('ds')
+*
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."COURSE1"."COURSE_ID")
+
+
+SQL> insert into student1 values('jaya', 'y20cs178', 'cs221',4);
+insert into student1 values('jaya', 'y20cs178', 'cs221',4)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SCOTT.SYS_C005462) violated - parent key not
+found
+
+
+SQL> insert into student1 values('jaya', 'y20cs178', 'cs222',4);
+
+1 row created.
+
+SQL> insert into grade values('y20cs178', 4, 'cs222',4.5);
+insert into grade values('y20cs178', 4, 'cs222',4.5)
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C005463) violated
+SQL> select * from student1;
+
+NAME                 ID                   COURSE_ID    SEMESTER
+-------------------- -------------------- ---------- ----------
+jaya                 y20cs178             cs222               4
+
+SQL> select * from course1;
+
+COURSE_NAME          COURSE_ID            DEPARTMENT
+-------------------- -------------------- ----------
+dbms                 cs222                cse
+
+SQL> select * from grade;
+
+ID           SEMESTER COURSE                    GRADE
+---------- ---------- -------------------- ----------
+y20cs178            4 cs222                         6
+3. Write update statements that violate the constraints specified in problem 1.
+SQL> update course1 set course_id='cs221' where course_id='cs222';
+update course1 set course_id='cs221' where course_id='cs222'
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (SCOTT.SYS_C005462) violated - child record
+Found
+
+SQL> update student1 set id=null where name='jaya';
+update student1 set id=null where name='jaya'
+                    *
+ERROR at line 1:
+ORA-01407: cannot update ("SCOTT"."STUDENT1"."ID") to NULL
+
+SQL> update grade set grade=4 where id='y20cs178';
+update grade set grade=4 where id='y20cs178'
+*
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C005463) violated
+
+ 4. Write delete statements that violate the constraints specified in problem 1. 
+SQL> delete from course1 where course_id='cs222';
+delete from course1 where course_id='cs222'
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (SCOTT.SYS_C005462) violated - child record
+Found
+5. Drop the constraints specified in problem 1 using alter table statements. 
+
+SQL> alter table course1 drop unique(course_name);
+
+Table altered.
+
+SQL>  alter table student1 drop primary key;
+
+Table altered.
+6. Add the constraints specified in problem 1 using alter table statements
+
+SQL> alter table grade modify id varchar2(10) not null;
+
+Table altered.
